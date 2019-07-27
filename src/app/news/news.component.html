@@ -1,0 +1,48 @@
+<div class="bg-white rounded p-2 shadow my-4">
+  <mat-form-field class="my-2">
+    <input matInput [(ngModel)]="selectedHeader" (keyup)="applyFilter()" placeholder="Filter">
+  </mat-form-field>
+  <mat-form-field class="my-2">
+    <mat-label>Categories</mat-label>
+    <mat-select (selectionChange)="applyFilter()" [(ngModel)]="selectedCategory">
+      <mat-option [value]="''">
+        Tümü
+      </mat-option>
+      <mat-option *ngFor="let category of categories" [value]="category.code">
+        {{category.description}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
+
+<div class="mat-elevation-z8 mb-5">
+  <table mat-table [dataSource]="dataSource" matSort>
+
+    <ng-container matColumnDef="time">
+      <th width="10%" mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
+      <td width="10%" mat-cell *matCellDef="let row"> {{row.date | date:'M/d/yy'}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="date">
+      <th width="10%" mat-header-cell *matHeaderCellDef mat-sort-header> Saat </th>
+      <td width="10%" mat-cell *matCellDef="let row"> {{row.date | date:'HH:mm'}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="headline">
+      <th width="70%" mat-header-cell *matHeaderCellDef mat-sort-header> Başlık </th>
+      <td width="70%" mat-cell [ngStyle]="getLocalData(row.id)" style="cursor: pointer"
+          *matCellDef="let row" (click)="openDialog(row)"> {{row.headline}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="category">
+      <th width="10%" mat-header-cell *matHeaderCellDef> category </th>
+      <td width="10%" mat-cell *matCellDef="let row"> {{row.category}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+    </tr>
+  </table>
+  <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+</div>
